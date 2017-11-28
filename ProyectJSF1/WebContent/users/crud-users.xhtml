@@ -1,0 +1,145 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:p="http://primefaces.prime.com.tr/ui">
+	  
+
+<f:view>
+
+	<h:head>
+		<title>Control de usuarios</title>
+		<style type="text/css">
+.ui.widget{
+	font-size: 75% !important;
+}
+</style>
+</h:head>
+
+	<h:body>
+	<h:form id="frmGeneral">
+		<p:fieldset legend="Gestion de Usuarios" toggleable="true">
+			<p:messages id="messages"/>
+			<h:inputHidden id="id" size="60" value="#{userBean.user.id}" />
+			<h:panelGrid columns="2"
+			style="font-family: Verdana, Arial; font-weight:bold;">
+			
+			<h:outputLabel id="lblName" value="*Name:" for="name"
+			style="float:rigth;"/>
+			<p:inputText id="name" sixe="60"
+			value="#{userBean.user.name}" required="true"
+			requiredMessage="Campo [name] es requerido. "/>
+			
+			<h:outputLabel id="lblLogin" value="*Login:" for="login"
+			style="float:rigth;"/>
+			<p:inputText id="login" sixe="20"
+			value="#{userBean.user.login}" required="true"
+			requiredMessage="Campo [login] es requerido. "/>
+			
+			<h:outputLabel id="lblPassword" value="*Password:" for="password"
+			style="float:rigth;"/>
+			<p:password id="password" sixe="20"
+			value="#{userBean.user.password}" required="true"
+			requiredMessage="Campo [password] es requerido. "/>
+			
+			<h:outputLabel id="lblAge" value="*Age:" for="age"
+			style="float:rigth;"/>
+			<p:inputText id="age" sixe="2" value="#{userBean.user.age}" 
+			required="true"	requiredMessage="Campo [Age] es requerido. "
+			validatorMessage="Campo [Age] contiene errores. Verifique. ">
+			<f:validateLongRange minimun="5" />
+			</p:inputText>
+			
+			<h:outputLabel id="lblSecurityRole" value="*Role:" for="securityRole"
+			style="float:rigth;"/>
+			<h:selectOneMenu id="securityRole"
+			value="#{userBean.securityRoleID}" required="true"
+			requiredMessage="Campo [Security Role] es obligatorio">
+			<f:selectItem itemLabel="Seleccione..." itemValue="" />
+			<f:selectItems value="#{securityRoleBean.securityRoles}"
+				var="role" itemLabel="#{role.name}" itemValue="#{role.id}"/>
+			</h:selectOneMenu>
+			
+			<p:commandButton value="Guardar" action="#{userBean.save()}"
+				update="frmGeneral,messages,dtUsers"/>
+			</h:panelGrid>
+			
+			<p:spacer height="10"/>
+			
+			<p:dataTable id="dtUsers" 
+				emptyMessage="No se encontraron registros"
+				value="#{userBean.users}" var="u"
+				style="text-aling:center; font-weight:bold;">
+				<f:facet name="header">
+					<h:outputText value="Registro de Users"/>
+				</f:facet>
+				
+				<p:column>
+					<f:facet name="header">
+					<h:outputText value="Name"/>
+				</f:facet>
+				<h:outputText value="#{u.name}"/>
+				</p:column>
+				
+				<p:column>
+					<f:facet name="header">
+					<h:outputText value="Login"/>
+				</f:facet>
+				<h:outputText value="#{u.login}"/>
+				</p:column>
+				
+				<p:column>
+					<f:facet name="header">
+					<h:outputText value="Password"/>
+				</f:facet>
+				<h:outputText value="#{u.password}"/>
+				</p:column>
+				
+				<p:column>
+					<f:facet name="header">
+					<h:outputText value="Age"/>
+				</f:facet>
+				<h:outputText value="#{u.age}"/>
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+					<h:outputText value="Security Role"/>
+				</f:facet>
+				<h:outputText value="#{u.securityRole.name}"/>
+				</p:column>
+				
+				<p:column>
+					<f:facet name="header">
+					<h:outputText value="Control"/>
+				</f:facet>
+				<f:ajax event="click" render="@form"
+				listener="#{userBean.remove(u)}">
+					<h:commandLink value="Eliminar" />
+				</f:ajax>
+				
+				<p:spacer height="10" />
+				
+				<f:ajax event="click" render="@form"
+				listener="#{userBean.search(u)}">
+					<h:commandLink value="Editar" />
+				</f:ajax>
+				</p:column>
+				
+				<f:facet name="footer">
+					<h:outputText value="Hay un total de #{userBean.count}
+					Usuario(s) registrados en el sistema." />
+				</f:facet>
+				
+			</p:dataTable>
+			
+		</p:fieldset>	
+		
+		</h:form>
+		
+	</h:body>
+	
+</f:view>
+
+
+</html>
